@@ -73,13 +73,13 @@ export function Spreadsheet({
   let accumulatedTotal = 0;
 
   return (
-    <div className="overflow-x-auto border rounded-lg bg-card shadow-sm">
+    <div className="overflow-auto max-h-[75vh] border rounded-lg bg-card shadow-sm relative hide-scrollbar">
       <table className="w-full text-sm text-left border-collapse">
-        <thead className="bg-muted/50 text-muted-foreground">
+        <thead className="text-muted-foreground">
           <tr>
-            <th className="p-2 font-medium w-24 sticky left-0 bg-muted/50 z-10">날짜</th>
+            <th className="p-2 font-medium w-24 sticky left-0 top-0 bg-slate-100 dark:bg-slate-900 z-30 shadow-[1px_0_0_0_rgba(0,0,0,0.1)]">날짜</th>
             {categories.map((cat) => (
-              <th key={cat} className="p-2 border-l font-medium min-w-[80px] group relative">
+              <th key={cat} className="p-2 border-l font-medium min-w-[80px] group relative sticky top-0 bg-slate-100 dark:bg-slate-900 z-20">
                 <div className="flex items-center justify-between">
                     <span>{cat}</span>
                     <button
@@ -93,11 +93,13 @@ export function Spreadsheet({
                 </div>
               </th>
             ))}
-            <th className="p-2 border-l font-medium w-10 flex items-center justify-center cursor-pointer hover:bg-muted" onClick={handleAddCategoryClick}>
-                <Plus className="h-4 w-4" />
+            <th className="p-2 border-l font-medium w-10 sticky top-0 bg-slate-100 dark:bg-slate-900 z-20 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800" onClick={handleAddCategoryClick}>
+                <div className="flex items-center justify-center w-full h-full">
+                    <Plus className="h-4 w-4" />
+                </div>
             </th>
-            <th className="p-2 border-l font-medium w-24 bg-muted/50">일계</th>
-            <th className="p-2 border-l font-medium w-24 bg-muted/50">누계</th>
+            <th className="p-2 border-l font-medium w-24 sticky top-0 bg-slate-100 dark:bg-slate-900 z-20">일계</th>
+            <th className="p-2 border-l font-medium w-24 sticky top-0 bg-slate-100 dark:bg-slate-900 z-20">누계</th>
           </tr>
         </thead>
         <tbody>

@@ -4,7 +4,8 @@ import * as React from "react";
 import { addMonths, format, subMonths, isSameMonth, parseISO, getDaysInMonth } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Spreadsheet, type Entries, type EntryValue } from "@/components/spreadsheet";
-import { TrendingDown, TrendingUp, DollarSign } from "lucide-react";
+import { TrendingDown, TrendingUp, DollarSign, LayoutPanelLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const INITIAL_CATEGORIES = ["식비", "교통", "쇼핑", "공과금", "문화생활"];
 
@@ -13,6 +14,7 @@ export default function Page() {
   const [categories, setCategories] = React.useState<string[]>(INITIAL_CATEGORIES);
   const [entries, setEntries] = React.useState<Entries>({});
   const [mounted, setMounted] = React.useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = React.useState(true);
 
   // Load from LocalStorage
   React.useEffect(() => {
@@ -89,9 +91,18 @@ export default function Page() {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-[1600px] mx-auto space-y-6">
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b pb-4">
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight">MoneySheet</h1>
-                <p className="text-muted-foreground">엑셀 스타일로 관리하는 나만의 가계부</p>
+            <div className="flex items-center gap-4 bg-muted/30 p-2 rounded-xl pr-6">
+                <button
+                    onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                    className="p-2 hover:bg-primary/10 hover:text-primary rounded-full transition-all duration-200 active:scale-90 cursor-pointer"
+                    title={isCalendarOpen ? "달력 숨기기" : "달력 보기"}
+                >
+                    <LayoutPanelLeft className={cn("h-5 w-5 transition-transform", !isCalendarOpen && "text-muted-foreground")} />
+                </button>
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight">MoneySheet</h1>
+                    <p className="text-muted-foreground text-xs">엑셀 스타일로 관리하는 나만의 가계부</p>
+                </div>
             </div>
             
             {/* Top Stats Card */}
@@ -117,6 +128,7 @@ export default function Page() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Sidebar: Calendar */}
+          {isCalendarOpen && (
           <div className="lg:col-span-3 space-y-6">
             <Calendar
               currentDate={currentDate}
@@ -145,9 +157,10 @@ export default function Page() {
                 </div>
             </div>
           </div>
+          )}
 
           {/* Right Content: Spreadsheet */}
-          <div className="lg:col-span-9">
+          <div className={cn("transition-all duration-300", isCalendarOpen ? "lg:col-span-9" : "lg:col-span-12")}>
             <Spreadsheet
               currentDate={currentDate}
               categories={categories}
